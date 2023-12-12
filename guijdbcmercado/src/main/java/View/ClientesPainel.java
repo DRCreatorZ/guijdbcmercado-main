@@ -57,7 +57,7 @@ public class ClientesPainel extends JPanel {
         // // Cria o banco de dados caso não tenha sido criado
         // new ProdutosDAO().criaTabela();
         // // incluindo elementos do banco na criação do painel
-        // atualizarTabela();
+        atualizarTabela();
 
         // tratamento de Eventos(construtor)
         table.addMouseListener(new MouseAdapter() {

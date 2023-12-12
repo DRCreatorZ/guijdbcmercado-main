@@ -21,9 +21,11 @@ public class VendasPainel extends JPanel {
     private JButton avancarButton;
     private JLabel totalLabel; // Adiciona um campo para exibir o total
     private double total; // Adiciona um campo para armazenar o total dos produtos
+    private ConclusaoCompraPainel conclusaoCompraPainel; // Adiciona um campo para o ConclusaoCompraPainel
 
-    public VendasPainel(EstoqueControll estoqueControll) {
+    public VendasPainel(EstoqueControll estoqueControll, ConclusaoCompraPainel conclusaoCompraPainel) {
         this.estoqueControll = estoqueControll;
+        this.conclusaoCompraPainel = conclusaoCompraPainel; // Inicializa o campo com o ConclusaoCompraPainel
         setLayout(new BorderLayout());
 
         codigoBarrasField = new JTextField();
@@ -83,17 +85,20 @@ public class VendasPainel extends JPanel {
                 // Obtém os produtos do VendasPainel
                 List<String> produtos = obterProdutosDoVendasPainel();
 
-                // Passa os produtos para o ConclusaoCompraPainel
+                // Passa os produtos e o total para o ConclusaoCompraPainel
                 conclusaoCompraPainel.setProdutos(produtos);
-            }
-
-            private List<String> obterProdutosDoVendasPainel() {
-                // Lógica para obter a lista de produtos do VendasPainel
-                List<String> produtos = new ArrayList<>();
-                // Adicione aqui a lógica para obter os produtos do VendasPainel e formatá-los como desejado
-                return produtos;
+                conclusaoCompraPainel.setTotal(total);
             }
         });
+    }
+
+    private List<String> obterProdutosDoVendasPainel() {
+        // Lógica para obter a lista de produtos do VendasPainel
+        List<String> produtos = new ArrayList<>();
+        for (int i = 0; i < produtosListModel.size(); i++) {
+            produtos.add(produtosListModel.getElementAt(i));
+        }
+        return produtos;
     }
 
     private void adicionarProduto() {
@@ -102,11 +107,18 @@ public class VendasPainel extends JPanel {
             Produto produto = estoqueControll.obterProdutoPorCodigoBarras(codigoBarras);
 
             if (produto != null) {
-                produtosListModel.addElement(produto.getNome() + " - Preço: R$" + produto.getPreco());
+                double precoProduto = produto.getPreco();
+
+                // Aplica desconto se o cliente for VIP
+                if (clienteVipCheckBox.isSelected()) {
+                    precoProduto *= 0.95; // Desconto de 5%
+                }
+
+                produtosListModel.addElement(produto.getNome() + " - Preço: R$" + precoProduto);
                 codigoBarrasField.setText("");
 
                 // Atualiza o total ao adicionar um produto
-                total += produto.getPreco();
+                total += precoProduto;
                 atualizarTotalLabel();
             } else {
                 JOptionPane.showMessageDialog(this, "Produto não encontrado no estoque", "Erro", JOptionPane.ERROR_MESSAGE);
