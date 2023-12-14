@@ -26,7 +26,8 @@ public class ConclusaoCompraPainel extends JPanel {
         JScrollPane detalhesCompraScrollPane = new JScrollPane(detalhesCompraList);
 
         totalCompraLabel = new JLabel("Total da Compra: R$ 0.00");
-        opcoesPagamentoComboBox = new JComboBox<>(new String[]{"Dinheiro", "Cartão de Crédito", "Cartão de Débito", "Pix"});
+        opcoesPagamentoComboBox = new JComboBox<>(
+                new String[] { "Dinheiro", "Cartão de Crédito", "Cartão de Débito", "Pix" });
         finalizarCompraButton = new JButton("Finalizar Compra");
         imprimirCupomButton = new JButton("Imprimir Cupom Fiscal");
 

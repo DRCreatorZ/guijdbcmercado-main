@@ -12,7 +12,7 @@ import Model.Clientes;
 
 public class ClientesDAO {
     // atributos
-    
+
     private Connection connection;
     private List<Clientes> clientes;
 
@@ -102,7 +102,7 @@ public class ClientesDAO {
             stmt.setString(2, endereco);
             stmt.setString(3, telefone);
             stmt.setString(4, cpf);
-           // cpf é chave primaria não pode ser alterada.
+            // cpf é chave primaria não pode ser alterada.
             stmt.executeUpdate();
             System.out.println("Dados atualizados com sucesso");
         } catch (SQLException e) {

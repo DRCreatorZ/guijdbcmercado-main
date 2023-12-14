@@ -2,11 +2,8 @@ package View;
 
 import Controller.EstoqueControll;
 import Model.Produto;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class EstoquePainel extends JPanel {
@@ -48,7 +45,8 @@ public class EstoquePainel extends JPanel {
             mensagem.append(produto.getNome()).append(" - Quantidade: ").append(produto.getQuantidade()).append("\n");
         }
 
-        JOptionPane.showMessageDialog(this, mensagem.toString(), "Produtos em Estoque", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, mensagem.toString(), "Produtos em Estoque",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void adicionarProduto() {

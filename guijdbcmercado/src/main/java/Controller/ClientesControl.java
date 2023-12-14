@@ -3,7 +3,6 @@ package Controller;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import Connection.ClientesDAO;
 import Model.Clientes;
 
@@ -14,18 +13,15 @@ public class ClientesControl {
     // Atributos
     private List<Clientes> clientes;
     private DefaultTableModel tableModel;
-    private JTable table;
 
     // Construtor
-public ClientesControl(List<Clientes> clientes, DefaultTableModel tableModel, JTable table)
-{
-this.clientes = clientes;
-this.tableModel = tableModel;
-this.table = table;
-}
+    public ClientesControl(List<Clientes> clientes, DefaultTableModel tableModel, JTable table) {
+        this.clientes = clientes;
+        this.tableModel = tableModel;
+    }
 
-//Métodos do produto CRUD
-// Método para atualizar a tabela de exibição com dados do banco de dados
+    // Métodos do produto CRUD
+    // Método para atualizar a tabela de exibição com dados do banco de dados
     private void atualizarTabela() {
         tableModel.setRowCount(0); // Limpa todas as linhas existentes na tabela
         clientes = new ClientesDAO().listarTodos();
@@ -33,7 +29,7 @@ this.table = table;
         for (Clientes cliente : clientes) {
             // Adiciona os dados de cada produto como uma nova linha na tabela Swing
             tableModel.addRow(new Object[] { cliente.getNome(), cliente.getEndereco(),
-                cliente.getTelefone(), cliente.getCpf() });
+                    cliente.getTelefone(), cliente.getCpf() });
         }
     }
 

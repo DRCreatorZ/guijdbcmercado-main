@@ -2,7 +2,6 @@ package View;
 
 import Controller.EstoqueControll;
 import Model.Produto;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -74,9 +73,11 @@ public class VendasPainel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para avançar para a tela de conclusão
-                JTabbedPane jTPane = (JTabbedPane) SwingUtilities.getAncestorOfClass(JTabbedPane.class, VendasPainel.this);
+                JTabbedPane jTPane = (JTabbedPane) SwingUtilities.getAncestorOfClass(JTabbedPane.class,
+                        VendasPainel.this);
 
-                // Supondo que "Tela de Conclusão de Compras" está na terceira posição (índice 2)
+                // Supondo que "Tela de Conclusão de Compras" está na terceira posição (índice
+                // 2)
                 jTPane.setSelectedIndex(2);
 
                 // Obtém a referência para o ConclusaoCompraPainel
@@ -121,7 +122,8 @@ public class VendasPainel extends JPanel {
                 total += precoProduto;
                 atualizarTotalLabel();
             } else {
-                JOptionPane.showMessageDialog(this, "Produto não encontrado no estoque", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Produto não encontrado no estoque", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }

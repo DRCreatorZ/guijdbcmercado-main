@@ -1,14 +1,10 @@
 package Controller;
+
 import java.util.List;
 import java.util.Optional;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-
 import Connection.ProdutoDAO;
-
-import java.sql.SQLException;
-import java.util.List;
 import Model.Estoque;
 import Model.Produto;
 import View.ConclusaoCompraPainel;
@@ -20,9 +16,10 @@ public class EstoqueControll {
     public EstoqueControll() {
         this.estoque = new Estoque();
         this.produtoDAO = new ProdutoDAO(); // Inicialize o ProdutoDAO
-     // Adicione alguns produtos ao estoque para teste
-  
- }
+        // Adicione alguns produtos ao estoque para teste
+
+    }
+
     /**
      * Adiciona um novo produto ao estoque e atualiza o banco de dados.
      *
@@ -78,6 +75,7 @@ public class EstoqueControll {
             return null;
         }
     }
+
     public Produto obterProdutoPorCodigoBarras(String codigoBarras) {
         try {
             Optional<Produto> produtoBanco = produtoDAO.listarTodos().stream()
@@ -102,10 +100,10 @@ public class EstoqueControll {
     // Método para deduzir a quantidade do estoque
     public void deduzirQuantidadeDoEstoque(String codigoBarras, int quantidade) {
         Produto produto = estoque.get(codigoBarras);
-    
+
         if (produto != null && quantidade > 0) {
             int quantidadeAtual = produto.getQuantidade();
-    
+
             if (quantidadeAtual >= quantidade) {
                 int novaQuantidade = quantidadeAtual - quantidade;
                 produto.setQuantidade(novaQuantidade);
@@ -119,45 +117,44 @@ public class EstoqueControll {
             System.err.println("Produto não encontrado ou quantidade inválida.");
         }
     }
-    
-public void imprimirCupomFiscal(double totalCompra, String dataHoraAtual, ConclusaoCompraPainel conclusaoCompraPainel) {
-    DefaultListModel<String> detalhesCompraModel = conclusaoCompraPainel.getDetalhesCompraModel();
-    
-    // Obtém o valor total da compra
-    String valorTotal = String.format("%.2f", totalCompra);
 
-    // Obtém a quantidade de produtos (assumindo que detalhesCompraModel seja um campo da classe)
-    int quantidadeProdutos = detalhesCompraModel.size();
+    public void imprimirCupomFiscal(double totalCompra, String dataHoraAtual,
+            ConclusaoCompraPainel conclusaoCompraPainel) {
+        DefaultListModel<String> detalhesCompraModel = conclusaoCompraPainel.getDetalhesCompraModel();
 
-    // Verifica se o cliente é VIP (assumindo um método isClienteVIP() na classe EstoqueControll)
-    boolean clienteVIP = isClienteVIP();
+        // Obtém o valor total da compra
+        String valorTotal = String.format("%.2f", totalCompra);
 
-    // Constrói o conteúdo do cupom fiscal
-    StringBuilder cupomFiscal = new StringBuilder();
-    cupomFiscal.append("Data/Hora: ").append(dataHoraAtual).append("\n");
-    cupomFiscal.append("Valor Total: R$").append(valorTotal).append("\n");
-    cupomFiscal.append("Quantidade de Produtos: ").append(quantidadeProdutos).append("\n");
-    cupomFiscal.append("\nDetalhes da Compra:\n");
+        // Obtém a quantidade de produtos (assumindo que detalhesCompraModel seja um
+        // campo da classe)
+        int quantidadeProdutos = detalhesCompraModel.size();
 
-    // Adiciona detalhes de cada produto (assumindo que detalhesCompraModel seja um campo da classe)
-    for (int i = 0; i < detalhesCompraModel.size(); i++) {
-        cupomFiscal.append(detalhesCompraModel.getElementAt(i)).append("\n");
+        // Constrói o conteúdo do cupom fiscal
+        StringBuilder cupomFiscal = new StringBuilder();
+        cupomFiscal.append("Data/Hora: ").append(dataHoraAtual).append("\n");
+        cupomFiscal.append("Valor Total: R$").append(valorTotal).append("\n");
+        cupomFiscal.append("Quantidade de Produtos: ").append(quantidadeProdutos).append("\n");
+        cupomFiscal.append("\nDetalhes da Compra:\n");
+
+        // Adiciona detalhes de cada produto (assumindo que detalhesCompraModel seja um
+        // campo da classe)
+        for (int i = 0; i < detalhesCompraModel.size(); i++) {
+            cupomFiscal.append(detalhesCompraModel.getElementAt(i)).append("\n");
+        }
+
+        // Lógica para imprimir o Cupom Fiscal
+        // Substitua esta linha com a lógica real de impressão
+        System.out.println("Cupom Fiscal impresso com sucesso:\n" + cupomFiscal.toString());
+        System.out.println("Cupom Fiscal impresso com sucesso:\n" + cupomFiscal.toString());
+        JOptionPane.showMessageDialog(null, "Cupom Fiscal impresso com sucesso:\n" + cupomFiscal.toString());
     }
 
-    // Lógica para imprimir o Cupom Fiscal
-    // Substitua esta linha com a lógica real de impressão
-    System.out.println("Cupom Fiscal impresso com sucesso:\n" + cupomFiscal.toString());
-    System.out.println("Cupom Fiscal impresso com sucesso:\n" + cupomFiscal.toString());
-    JOptionPane.showMessageDialog(null, "Cupom Fiscal impresso com sucesso:\n" + cupomFiscal.toString());
-}
-// Método fictício para determinar se o cliente é VIP
-private boolean isClienteVIP() {
-    // Lógica para determinar se o cliente é VIP
-    // Substitua ou implemente conforme necessário
-    return true;  // Exemplo: Sempre considera o cliente como VIP
-}
-
-
+    // Método fictício para determinar se o cliente é VIP
+    private boolean isClienteVIP() {
+        // Lógica para determinar se o cliente é VIP
+        // Substitua ou implemente conforme necessário
+        return true; // Exemplo: Sempre considera o cliente como VIP
+    }
 
     /**
      * Atualiza a tabela do banco de dados com os produtos do estoque.

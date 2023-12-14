@@ -3,7 +3,6 @@ package View;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import Connection.ProdutoDAO;
 import Connection.ClientesDAO;
 import Controller.ClientesControl;
 import java.awt.*;

@@ -1,7 +1,6 @@
 package Connection;
 
 import Model.Produto;
-
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +13,8 @@ import java.util.List;
 public class ProdutoDAO {
     private Connection connection;
 
-    // Construtor que inicializa a conexão e cria a tabela de produtos se não existir
+    // Construtor que inicializa a conexão e cria a tabela de produtos se não
+    // existir
     public ProdutoDAO() {
         this.connection = ConnectionFactory.getConnection();
         criarTabelaProdutos();
@@ -72,7 +72,8 @@ public class ProdutoDAO {
     }
 
     private boolean registroExiste(String codigoBarra) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT 1 FROM produtos WHERE codigo_barra = ?")) {
+        try (PreparedStatement preparedStatement = connection
+                .prepareStatement("SELECT 1 FROM produtos WHERE codigo_barra = ?")) {
             preparedStatement.setString(1, codigoBarra);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 return resultSet.next();
