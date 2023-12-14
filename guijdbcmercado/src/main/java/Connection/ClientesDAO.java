@@ -11,7 +11,8 @@ import java.util.List;
 import Model.Clientes;
 
 public class ClientesDAO {
-    // atributo
+    // atributos
+    
     private Connection connection;
     private List<Clientes> clientes;
 
