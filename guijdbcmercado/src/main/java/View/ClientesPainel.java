@@ -107,6 +107,37 @@ public class ClientesPainel extends JPanel {
             clienteTelefoneTextField.setText("");
             clienteCpfField.setText("");
         });
+
+        // Defina as novas cores para os componentes
+        Color background = new Color(255, 255, 240); // Cor de fundo mais clara
+        Color buttonColor = new Color(0, 102, 51); // Cor do botão verde-escuro
+        Color labelColor = Color.BLACK; // Cor do texto preto
+        Color tableHeaderColor = new Color(0, 51, 25); // Cor do cabeçalho da tabela
+
+        setBackground(background);
+
+        inputPanel.setBackground(background);
+        inputPanel.setForeground(labelColor);
+
+        clienteNomeField.setBackground(Color.WHITE);
+        clienteEnderecoField.setBackground(Color.WHITE);
+        clienteTelefoneTextField.setBackground(Color.WHITE);
+        clienteCpfField.setBackground(Color.WHITE);
+
+        cadastrar.setBackground(buttonColor);
+        cadastrar.setForeground(Color.WHITE);
+
+        editar.setBackground(buttonColor);
+        editar.setForeground(Color.WHITE);
+
+        apagar.setBackground(buttonColor);
+        apagar.setForeground(Color.WHITE);
+
+        table.setBackground(Color.WHITE);
+        table.setForeground(labelColor);
+        table.setSelectionBackground(new Color(204, 255, 204)); // Cor de seleção mais clara
+        table.getTableHeader().setBackground(tableHeaderColor);
+        table.getTableHeader().setForeground(Color.WHITE);
     }
 
     // metodos de eventos (atualizar tabela)
@@ -122,5 +153,3 @@ public class ClientesPainel extends JPanel {
         }
     }
 }
- 
-

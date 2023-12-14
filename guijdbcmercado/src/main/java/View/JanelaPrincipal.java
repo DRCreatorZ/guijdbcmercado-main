@@ -13,7 +13,7 @@ public class JanelaPrincipal extends JFrame {
 
     public JanelaPrincipal() {
         super("Janela Principal");
-            setSize(800, 600);
+        setSize(800, 600);
         setLocationRelativeTo(null);
 
         // Inicializa o CardLayout
@@ -44,12 +44,21 @@ public class JanelaPrincipal extends JFrame {
 
         // Adiciona as janelas ao JTabbedPane
         jTPane.add("Tela de Clientes", tab1);
-        jTPane.add("Tela de Registro de venda", vendasPainel);
+        jTPane.add("Tela de Registro de Venda", vendasPainel);
         jTPane.add("Tela de Conclusão de Compras", conclusaoCompraPainel);
         jTPane.add("Tela de Estoque", tab4);
 
         // Define a janela principal para ser visível
         setVisible(true);
+
+        // Defina as novas cores para a interface principal
+        Color background = new Color(240, 240, 240); // Cor de fundo mais clara
+        Color tabbedPaneBackground = new Color(200, 200, 200); // Cor de fundo do JTabbedPane
+        Color tabbedPaneForeground = Color.BLACK; // Cor do texto do JTabbedPane
+
+        getContentPane().setBackground(background);
+        jTPane.setBackground(tabbedPaneBackground);
+        jTPane.setForeground(tabbedPaneForeground);
     }
 
     // Método para obter o EstoqueControll

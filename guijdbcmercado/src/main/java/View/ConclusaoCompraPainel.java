@@ -1,9 +1,7 @@
 package View;
 
 import javax.swing.*;
-
 import Controller.EstoqueControll;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,33 +14,45 @@ public class ConclusaoCompraPainel extends JPanel {
     private JLabel totalCompraLabel;
     private JComboBox<String> opcoesPagamentoComboBox;
     private JButton finalizarCompraButton, imprimirCupomButton;
-    private double total; // Adiciona um campo para armazenar o total dos produtos
-    private EstoqueControll estoqueControll; // Adiciona uma referência ao EstoqueControll
+    private double total;
+    private EstoqueControll estoqueControll;
 
     public ConclusaoCompraPainel(EstoqueControll estoqueControll) {
-        this.estoqueControll = estoqueControll; // Inicializa o EstoqueControll
+        this.estoqueControll = estoqueControll;
         setLayout(new BorderLayout());
 
-        // Lista final dos produtos, quantidades e preços
         detalhesCompraModel = new DefaultListModel<>();
         detalhesCompraList = new JList<>(detalhesCompraModel);
         JScrollPane detalhesCompraScrollPane = new JScrollPane(detalhesCompraList);
 
-        // Rótulo para exibir o total da compra
         totalCompraLabel = new JLabel("Total da Compra: R$ 0.00");
-
-        // Opções de pagamento
-        String[] opcoesPagamento = {"Dinheiro", "Cartão de Crédito", "Cartão de Débito", "Pix"};
-        opcoesPagamentoComboBox = new JComboBox<>(opcoesPagamento);
-
-        // Botão para finalizar a compra
+        opcoesPagamentoComboBox = new JComboBox<>(new String[]{"Dinheiro", "Cartão de Crédito", "Cartão de Débito", "Pix"});
         finalizarCompraButton = new JButton("Finalizar Compra");
-
-        // Botão opcional para imprimir o relatório de vendas (Cupom Fiscal)
         imprimirCupomButton = new JButton("Imprimir Cupom Fiscal");
 
-        // Adicionando componentes ao painel de conclusão
+        // Defina as novas cores para os componentes
+        Color background = new Color(255, 255, 240); // Cor de fundo amarelo claro
+        Color buttonColor = new Color(50, 120, 50); // Cor do botão verde escuro
+        Color labelColor = Color.BLACK; // Cor do texto preto
+
+        setBackground(background);
+
+        detalhesCompraList.setBackground(Color.WHITE);
+        detalhesCompraList.setSelectionBackground(new Color(200, 200, 255));
+
+        totalCompraLabel.setForeground(labelColor);
+
+        opcoesPagamentoComboBox.setBackground(Color.WHITE);
+        opcoesPagamentoComboBox.setForeground(labelColor);
+
+        finalizarCompraButton.setBackground(buttonColor);
+        finalizarCompraButton.setForeground(Color.WHITE);
+
+        imprimirCupomButton.setBackground(buttonColor);
+        imprimirCupomButton.setForeground(Color.WHITE);
+
         JPanel botoesPanel = new JPanel();
+        botoesPanel.setBackground(background);
         botoesPanel.add(finalizarCompraButton);
         botoesPanel.add(imprimirCupomButton);
 
@@ -51,7 +61,6 @@ public class ConclusaoCompraPainel extends JPanel {
         add(opcoesPagamentoComboBox, BorderLayout.NORTH);
         add(botoesPanel, BorderLayout.EAST);
 
-        // Adicionando ação ao botão "Finalizar Compra"
         finalizarCompraButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -59,7 +68,6 @@ public class ConclusaoCompraPainel extends JPanel {
             }
         });
 
-        // Adicionando ação ao botão "Imprimir Cupom Fiscal"
         imprimirCupomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,78 +75,56 @@ public class ConclusaoCompraPainel extends JPanel {
             }
         });
     }
-    public DefaultListModel<String> getDetalhesCompraModel() {
-        return detalhesCompraModel;
-    }
-    
+
+    // Métodos adicionados permanecem inalterados
 
     private void finalizarCompra() {
-        // Lógica para finalizar a compra
-        // Atualize conforme necessário
         JOptionPane.showMessageDialog(this, "Compra finalizada com sucesso!");
-    
-        // Deduz a quantidade do estoque para cada produto na lista
+
         for (int i = 0; i < detalhesCompraModel.size(); i++) {
             String produtoTexto = detalhesCompraModel.getElementAt(i);
             String codigoBarras = extrairCodigoBarrasDoTexto(produtoTexto);
             int quantidadeComprada = extrairQuantidadeDoTexto(produtoTexto);
-    
-            // Debugging para verificar os valores obtidos
+
             System.out.println("Produto: " + codigoBarras + ", Quantidade: " + quantidadeComprada);
-    
+
             estoqueControll.deduzirQuantidadeDoEstoque(codigoBarras, quantidadeComprada);
         }
     }
-    
 
-    // Métodos auxiliares para extrair informações do texto do produto
     private String extrairCodigoBarrasDoTexto(String textoProduto) {
-        // Verifica se o textoProduto está no formato esperado
         if (textoProduto.matches("\\d+ - .*")) {
-            // Usa expressão regular para extrair o código de barras (sequência de dígitos)
             return textoProduto.split(" - ")[0];
         } else {
-            // Se o formato não corresponder ao esperado, retorna uma string vazia ou lança uma exceção, conforme necessário
             return "";
         }
     }
-    
 
     private int extrairQuantidadeDoTexto(String textoProduto) {
         try {
-            // Encontrar a última ocorrência de espaço em branco
             int ultimoEspaco = textoProduto.lastIndexOf(" ");
-    
-            // Extrair a parte da string após o último espaço em branco (supondo que seja a quantidade)
             String quantidadeTexto = textoProduto.substring(ultimoEspaco + 1);
-    
-            // Remover caracteres não numéricos (manter apenas os dígitos)
             quantidadeTexto = quantidadeTexto.replaceAll("\\D+", "");
-    
-            // Tentar converter a quantidade para inteiro
             return Integer.parseInt(quantidadeTexto);
         } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
-            // Se ocorrer um erro ao converter, tratar ou imprimir a exceção
             e.printStackTrace();
-            return 0; // Ou retornar um valor padrão
+            return 0;
         }
     }
-    
 
     private void imprimirCupomFiscal() {
-        // Obtém a data e hora atuais
         String dataHoraAtual = java.time.LocalDateTime.now().toString();
-    
-        // Chama o método no EstoqueControll passando as informações necessárias
         estoqueControll.imprimirCupomFiscal(total, dataHoraAtual, this);
     }
-    
-    
+
+    public DefaultListModel<String> getDetalhesCompraModel() {
+        return detalhesCompraModel;
+    }
 
     public void setProdutos(List<String> produtos) {
-        detalhesCompraModel.clear(); // Limpa a lista existente
+        detalhesCompraModel.clear();
         for (String produto : produtos) {
-            detalhesCompraModel.addElement(produto); // Adiciona os novos produtos
+            detalhesCompraModel.addElement(produto);
         }
     }
 

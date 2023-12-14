@@ -14,49 +14,6 @@ import java.util.List;
 public class ProdutoDAO {
     private Connection connection;
 
-    // Consultas SQL
-    private static final String LIMPAR_TABELA = "DELETE FROM produtos";
-    private static final String VERIFICAR_REGISTRO = "SELECT COUNT(*) FROM produtos";
-
-    // Inicia uma transação no banco de dados
-    public void iniciarTransacao() {
-        try {
-            connection.setAutoCommit(false);
-        } catch (SQLException e) {
-            System.err.println("Erro ao desativar auto commit: " + e.getMessage());
-        }
-    }
-
-    // Finaliza uma transação no banco de dados
-    public void finalizarTransacao() {
-        try {
-            connection.commit();
-        } catch (SQLException e) {
-            System.err.println("Erro no commit: " + e.getMessage());
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.err.println("Erro ao redefinir auto commit: " + e.getMessage());
-            }
-        }
-    }
-
-    // Executa rollback em caso de falha na transação
-    public void rollbackTransacao() {
-        try {
-            connection.rollback();
-        } catch (SQLException e) {
-            System.err.println("Erro no rollback: " + e.getMessage());
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                System.err.println("Erro ao redefinir auto commit: " + e.getMessage());
-            }
-        }
-    }
-
     // Construtor que inicializa a conexão e cria a tabela de produtos se não existir
     public ProdutoDAO() {
         this.connection = ConnectionFactory.getConnection();
@@ -125,7 +82,9 @@ public class ProdutoDAO {
 
     public void atualizarTabelaBancoDados(List<Produto> produtos) {
         try {
-            iniciarTransacao();
+            obterConexao();
+            connection.setAutoCommit(false); // Desativa o autoCommit
+
             for (Produto produto : produtos) {
                 if (registroExiste(produto.getCodigoBarra())) {
                     atualizarProduto(produto);
@@ -133,11 +92,14 @@ public class ProdutoDAO {
                     adicionarProduto(produto);
                 }
             }
-            finalizarTransacao();
+
+            connection.commit(); // Realiza o commit se não houve erros
         } catch (SQLException e) {
             rollbackTransacao();
             System.err.println("Erro ao atualizar tabela no banco de dados.");
             e.printStackTrace();
+        } finally {
+            fecharConexao();
         }
     }
 
@@ -156,6 +118,14 @@ public class ProdutoDAO {
     private void obterConexao() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = ConnectionFactory.getConnection();
+        }
+    }
+
+    private void rollbackTransacao() {
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            System.err.println("Erro no rollback: " + e.getMessage());
         }
     }
 

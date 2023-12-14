@@ -4,12 +4,9 @@ import Controller.EstoqueControll;
 import Model.Produto;
 
 import javax.swing.*;
-
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.List;
 
 public class EstoquePainel extends JPanel {
@@ -18,22 +15,25 @@ public class EstoquePainel extends JPanel {
     public EstoquePainel(EstoqueControll gerenciadorEstoque) {
         this.gerenciadorEstoque = gerenciadorEstoque;
 
-        JButton listarProdutosButton = new JButton("Listar Produtos");
-        listarProdutosButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                listarProdutos();
-            }
-        });
+        setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Layout mais moderno com espaçamento
 
-        JButton adicionarProdutoButton = new JButton("Adicionar Produto");
-        adicionarProdutoButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                adicionarProduto();
-            }
-        });
+        JButton listarProdutosButton = createStyledButton("Listar Produtos", Color.BLUE);
+        listarProdutosButton.addActionListener(e -> listarProdutos());
+
+        JButton adicionarProdutoButton = createStyledButton("Adicionar Produto", Color.GREEN);
+        adicionarProdutoButton.addActionListener(e -> adicionarProduto());
 
         add(listarProdutosButton);
         add(adicionarProdutoButton);
+    }
+
+    private JButton createStyledButton(String text, Color backgroundColor) {
+        JButton button = new JButton(text);
+        button.setBackground(backgroundColor);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(150, 50)); // Ajuste o tamanho conforme necessário
+        return button;
     }
 
     public void setGerenciadorEstoque(EstoqueControll gerenciadorEstoque) {
@@ -52,36 +52,34 @@ public class EstoquePainel extends JPanel {
     }
 
     private void adicionarProduto() {
-    // Criação do JDialog
-    JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Adicionar Produto", true);
-    dialog.setLayout(new GridLayout(5, 2));
+        // Criação do JDialog
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Adicionar Produto", true);
+        dialog.setLayout(new GridLayout(5, 2));
 
-    // Adiciona campos de entrada e rótulos ao JDialog
-    JTextField codigoBarraField = new JTextField();
-    JTextField nomeField = new JTextField();
-    JTextField quantidadeField = new JTextField();
-    JTextField precoField = new JTextField();
+        // Adiciona campos de entrada e rótulos ao JDialog
+        JTextField codigoBarraField = new JTextField();
+        JTextField nomeField = new JTextField();
+        JTextField quantidadeField = new JTextField();
+        JTextField precoField = new JTextField();
 
-    dialog.add(new JLabel("Código de Barras:"));
-    dialog.add(codigoBarraField);
-    dialog.add(new JLabel("Nome:"));
-    dialog.add(nomeField);
-    dialog.add(new JLabel("Quantidade:"));
-    dialog.add(quantidadeField);
-    dialog.add(new JLabel("Preço:"));
-    dialog.add(precoField);
+        dialog.add(new JLabel("Código de Barras:"));
+        dialog.add(codigoBarraField);
+        dialog.add(new JLabel("Nome:"));
+        dialog.add(nomeField);
+        dialog.add(new JLabel("Quantidade:"));
+        dialog.add(quantidadeField);
+        dialog.add(new JLabel("Preço:"));
+        dialog.add(precoField);
 
-    // Adiciona botões de OK e Cancelar ao JDialog
-    JButton okButton = new JButton("OK");
-    JButton cancelButton = new JButton("Cancelar");
+        // Adiciona botões de OK e Cancelar ao JDialog
+        JButton okButton = createStyledButton("OK", Color.BLUE);
+        JButton cancelButton = createStyledButton("Cancelar", Color.RED);
 
-    dialog.add(okButton);
-    dialog.add(cancelButton);
+        dialog.add(okButton);
+        dialog.add(cancelButton);
 
-    // Adiciona ação ao botão OK
-    okButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        // Adiciona ação ao botão OK
+        okButton.addActionListener(e -> {
             try {
                 // Obtem os valores dos campos
                 String codigoBarra = codigoBarraField.getText();
@@ -103,24 +101,20 @@ public class EstoquePainel extends JPanel {
                 JOptionPane.showMessageDialog(dialog, "Erro ao converter valores para números.", "Erro",
                         JOptionPane.ERROR_MESSAGE);
             }
-        }
-    });
+        });
 
-    // Adiciona ação ao botão Cancelar
-    cancelButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        // Adiciona ação ao botão Cancelar
+        cancelButton.addActionListener(e -> {
             // Fecha o JDialog sem fazer alterações
             dialog.dispose();
-        }
-    });
+        });
 
-    // Configurações finais do JDialog
-    dialog.setSize(300, 200);
-    dialog.setLocationRelativeTo(null); // Centraliza na tela
-    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        // Configurações finais do JDialog
+        dialog.setSize(300, 200);
+        dialog.setLocationRelativeTo(null); // Centraliza na tela
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-    // Exibe o JDialog
-    dialog.setVisible(true);
-}
+        // Exibe o JDialog
+        dialog.setVisible(true);
+    }
 }
