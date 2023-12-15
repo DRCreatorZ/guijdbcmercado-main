@@ -6,14 +6,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
+import View.VendasPainel;
 public class ConclusaoCompraPainel extends JPanel {
 
     private DefaultListModel<String> detalhesCompraModel;
     private JList<String> detalhesCompraList;
     private JLabel totalCompraLabel;
     private JComboBox<String> opcoesPagamentoComboBox;
-    private JButton finalizarCompraButton, imprimirCupomButton;
+    private JButton finalizarCompraButton, imprimirCupomButton,avancarButton2;
     private double total;
     private EstoqueControll estoqueControll;
 
@@ -30,7 +30,8 @@ public class ConclusaoCompraPainel extends JPanel {
                 new String[] { "Dinheiro", "Cartão de Crédito", "Cartão de Débito", "Pix" });
         finalizarCompraButton = new JButton("Finalizar Compra");
         imprimirCupomButton = new JButton("Imprimir Cupom Fiscal");
-
+        avancarButton2 = new JButton("Nova Compra");
+        
         // Defina as novas cores para os componentes
         Color background = new Color(255, 255, 240); // Cor de fundo amarelo claro
         Color buttonColor = new Color(50, 120, 50); // Cor do botão verde escuro
@@ -52,10 +53,14 @@ public class ConclusaoCompraPainel extends JPanel {
         imprimirCupomButton.setBackground(buttonColor);
         imprimirCupomButton.setForeground(Color.WHITE);
 
+        avancarButton2.setBackground(buttonColor);
+        avancarButton2.setForeground(Color.WHITE);
+
         JPanel botoesPanel = new JPanel();
         botoesPanel.setBackground(background);
         botoesPanel.add(finalizarCompraButton);
         botoesPanel.add(imprimirCupomButton);
+        botoesPanel.add(avancarButton2);
 
         add(detalhesCompraScrollPane, BorderLayout.CENTER);
         add(totalCompraLabel, BorderLayout.SOUTH);
@@ -75,10 +80,34 @@ public class ConclusaoCompraPainel extends JPanel {
                 imprimirCupomFiscal();
             }
         });
+    
+        avancarButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reiniciarCompra();
+            }
+        });
     }
 
     // Métodos adicionados permanecem inalterados
 
+    private void reiniciarCompra() {
+        // Limpar a lista de detalhes da compra
+        detalhesCompraModel.clear();
+    
+        // Resetar o total para zero
+        total = 0.0;
+        totalCompraLabel.setText("Total da Compra: R$ 0.00");
+    
+        // Adicionar outras ações de reinicialização, se necessário
+    
+        // Lógica para avançar para a tela de conclusão
+        JTabbedPane jTPane = (JTabbedPane) SwingUtilities.getAncestorOfClass(JTabbedPane.class,
+                ConclusaoCompraPainel.this);
+    
+        // Supondo que "Tela de Conclusão de Compras" está na terceira posição (índice 2)
+        jTPane.setSelectedIndex(2);
+    }
     private void finalizarCompra() {
         JOptionPane.showMessageDialog(this, "Compra finalizada com sucesso!");
 
@@ -134,3 +163,4 @@ public class ConclusaoCompraPainel extends JPanel {
         totalCompraLabel.setText("Total da Compra: R$" + String.format("%.2f", total));
     }
 }
+ 

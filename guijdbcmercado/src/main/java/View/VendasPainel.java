@@ -1,5 +1,4 @@
 package View;
-
 import Controller.EstoqueControll;
 import Model.Produto;
 import javax.swing.*;
@@ -15,16 +14,16 @@ public class VendasPainel extends JPanel {
     private DefaultListModel<String> produtosListModel;
     private JList<String> produtosList;
     private JCheckBox clienteVipCheckBox;
-    private JButton adicionarProdutoButton, removerProdutoButton;
+    private JButton adicionarProdutoButton, removerProdutoButton, limparCarrinhoButton;
     private EstoqueControll estoqueControll;
     private JButton avancarButton;
-    private JLabel totalLabel; // Adiciona um campo para exibir o total
-    private double total; // Adiciona um campo para armazenar o total dos produtos
-    private ConclusaoCompraPainel conclusaoCompraPainel; // Adiciona um campo para o ConclusaoCompraPainel
+    private JLabel totalLabel;
+    private double total;
+    private ConclusaoCompraPainel conclusaoCompraPainel;
 
     public VendasPainel(EstoqueControll estoqueControll, ConclusaoCompraPainel conclusaoCompraPainel) {
         this.estoqueControll = estoqueControll;
-        this.conclusaoCompraPainel = conclusaoCompraPainel; // Inicializa o campo com o ConclusaoCompraPainel
+        this.conclusaoCompraPainel = conclusaoCompraPainel;
         setLayout(new BorderLayout());
 
         codigoBarrasField = new JTextField();
@@ -38,7 +37,7 @@ public class VendasPainel extends JPanel {
         clienteVipCheckBox = new JCheckBox("Cliente VIP");
 
         avancarButton = new JButton("Pagamento");
-        totalLabel = new JLabel("Total: R$ 0.00"); // Inicializa o rótulo de total
+        totalLabel = new JLabel("Total: R$ 0.00");
 
         JPanel codigoBarrasPanel = new JPanel(new BorderLayout());
         codigoBarrasPanel.add(new JLabel("Código de Barras: "), BorderLayout.WEST);
@@ -49,7 +48,10 @@ public class VendasPainel extends JPanel {
         botoesPanel.add(removerProdutoButton);
         botoesPanel.add(clienteVipCheckBox);
         botoesPanel.add(avancarButton);
-        botoesPanel.add(totalLabel); // Adiciona o rótulo de total aos botõesPanel
+        botoesPanel.add(totalLabel);
+
+        limparCarrinhoButton = new JButton("Limpar Carrinho");
+        botoesPanel.add(limparCarrinhoButton);
 
         add(codigoBarrasPanel, BorderLayout.NORTH);
         add(produtosScrollPane, BorderLayout.CENTER);
@@ -75,9 +77,6 @@ public class VendasPainel extends JPanel {
                 // Lógica para avançar para a tela de conclusão
                 JTabbedPane jTPane = (JTabbedPane) SwingUtilities.getAncestorOfClass(JTabbedPane.class,
                         VendasPainel.this);
-
-                // Supondo que "Tela de Conclusão de Compras" está na terceira posição (índice
-                // 2)
                 jTPane.setSelectedIndex(2);
 
                 // Obtém a referência para o ConclusaoCompraPainel
@@ -91,10 +90,16 @@ public class VendasPainel extends JPanel {
                 conclusaoCompraPainel.setTotal(total);
             }
         });
+
+        limparCarrinhoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limparCarrinho();
+            }
+        });
     }
 
     private List<String> obterProdutosDoVendasPainel() {
-        // Lógica para obter a lista de produtos do VendasPainel
         List<String> produtos = new ArrayList<>();
         for (int i = 0; i < produtosListModel.size(); i++) {
             produtos.add(produtosListModel.getElementAt(i));
@@ -110,7 +115,6 @@ public class VendasPainel extends JPanel {
             if (produto != null) {
                 double precoProduto = produto.getPreco();
 
-                // Aplica desconto se o cliente for VIP
                 if (clienteVipCheckBox.isSelected()) {
                     precoProduto *= 0.95; // Desconto de 5%
                 }
@@ -118,7 +122,6 @@ public class VendasPainel extends JPanel {
                 produtosListModel.addElement(produto.getNome() + " - Preço: R$" + precoProduto);
                 codigoBarrasField.setText("");
 
-                // Atualiza o total ao adicionar um produto
                 total += precoProduto;
                 atualizarTotalLabel();
             } else {
@@ -131,28 +134,33 @@ public class VendasPainel extends JPanel {
     private void removerProduto() {
         int selectedIndex = produtosList.getSelectedIndex();
         if (selectedIndex != -1) {
-            // Obtém o texto do item selecionado para extrair o preço
             String selectedProduct = produtosListModel.getElementAt(selectedIndex);
             double preco = extrairPrecoDoTexto(selectedProduct);
 
-            // Atualiza o total ao remover um produto
             total -= preco;
             atualizarTotalLabel();
 
-            // Remove o produto da lista
             produtosListModel.remove(selectedIndex);
         }
     }
 
     private double extrairPrecoDoTexto(String textoProduto) {
-        // Lógica para extrair o preço do texto formatado
-        // Implemente de acordo com o formato real do texto
-        // Neste exemplo, assume-se que o preço está no final do texto após "Preço: R$"
         String precoTexto = textoProduto.substring(textoProduto.lastIndexOf("R$") + 3).trim();
         return Double.parseDouble(precoTexto);
     }
 
     private void atualizarTotalLabel() {
         totalLabel.setText("Total: R$" + String.format("%.2f", total));
+    }
+
+    private void limparCarrinho() {
+        produtosListModel.clear();
+        total = 0.0;
+        atualizarTotalLabel();
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+        atualizarTotalLabel();
     }
 }
