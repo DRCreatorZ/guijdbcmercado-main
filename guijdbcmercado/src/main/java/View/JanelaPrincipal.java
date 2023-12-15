@@ -11,7 +11,7 @@ public class JanelaPrincipal extends JFrame {
     private JTabbedPane jTPane;
 
     public JanelaPrincipal() {
-        super("Janela Principal");
+        super("Mini-Mercado D & M.");
         setSize(800, 600);
         setLocationRelativeTo(null);
 
@@ -42,10 +42,10 @@ public class JanelaPrincipal extends JFrame {
         EstoquePainel tab4 = new EstoquePainel(gerenciadorEstoque);
 
         // Adiciona as janelas ao JTabbedPane
-        jTPane.add("Tela de Clientes", tab1);
-        jTPane.add("Tela de Registro de Venda", vendasPainel);
-        jTPane.add("Tela de Conclusão de Compras", conclusaoCompraPainel);
-        jTPane.add("Tela de Estoque", tab4);
+        jTPane.add("Clientes", tab1);
+        jTPane.add("Registro de Venda", vendasPainel);
+        jTPane.add("Conclusão de Compras", conclusaoCompraPainel);
+        jTPane.add("Estoque", tab4);
 
         // Define a janela principal para ser visível
         setVisible(true);
