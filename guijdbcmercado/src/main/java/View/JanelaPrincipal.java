@@ -1,6 +1,7 @@
 package View;
 
 import Controller.EstoqueControll;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,12 +41,14 @@ public class JanelaPrincipal extends JFrame {
         // Cria instâncias das outras janelas
         ClientesPainel tab1 = new ClientesPainel();
         EstoquePainel tab4 = new EstoquePainel(gerenciadorEstoque);
-
+        TelaInicial telaInicial = new TelaInicial();
         // Adiciona as janelas ao JTabbedPane
+        jTPane.add("Tela Inicial", telaInicial);
         jTPane.add("Clientes", tab1);
         jTPane.add("Registro de Venda", vendasPainel);
         jTPane.add("Conclusão de Compras", conclusaoCompraPainel);
         jTPane.add("Estoque", tab4);
+        
 
         // Define a janela principal para ser visível
         setVisible(true);
